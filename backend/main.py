@@ -24,7 +24,7 @@ pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 app = FastAPI()
 
 # 2. CORS Setup
-origins = ["http://localhost:5173", "http://localhost:3000", "https://dh12.vercel.app"]
+origins = ["http://localhost:5173", "http://localhost:3000", "https://dh-12.vercel.app"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
