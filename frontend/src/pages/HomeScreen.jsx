@@ -175,6 +175,5 @@ export default function HomeScreen() {
           </form>
         )}
       </div>
-    </div>
-  );
+    );
 }
