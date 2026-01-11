@@ -288,6 +288,22 @@ async def add_resolution(resolution: Resolution, current_user: dict = Depends(ge
     created_res = await resolutions_collection.find_one({"_id": new_res.inserted_id})
     return resolution_helper(created_res)
 
+@app.delete("/api/resolutions/{id}")
+async def delete_resolution(id: str, current_user: dict = Depends(get_current_user)):
+    user_id = str(current_user["_id"])
+    task = await resolutions_collection.find_one({"_id": ObjectId(id)})
+    if not task:
+        raise HTTPException(status_code=404, detail="Resolution not found")
+    
+    # Verify ownership
+    if task.get("user_id") != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this task")
+    
+    # Delete the task
+    await resolutions_collection.delete_one({"_id": ObjectId(id)})
+    
+    return {"message": "Task deleted successfully"}
+
 @app.put("/api/resolutions/{id}/complete")
 async def complete_resolution(id: str, current_user: dict = Depends(get_current_user)):
     user_id = str(current_user["_id"])
@@ -331,6 +347,87 @@ async def complete_resolution(id: str, current_user: dict = Depends(get_current_
     return {"message": "Task completed!", "points_added": points_to_add}
 
 # --- AI ROUTES ---
+
+@app.post("/api/generate-tasks")
+async def generate_tasks(request: AIPrompt, current_user: dict = Depends(get_current_user)):
+    """Generate fun daily tasks based on user request using AI"""
+    if not request.prompt or not request.prompt.strip():
+        raise HTTPException(status_code=400, detail="Prompt cannot be empty")
+    
+    user_id = str(current_user["_id"])
+    
+    try:
+        # Call AI to generate tasks
+        prompt = f"""The user wants: {request.prompt}
+
+Generate 3-5 fun, daily tasks that are variations of this goal. Each task should:
+- Be achievable daily
+- Be fun and engaging
+- Have a difficulty-based point value (average is 10 points, easy=5-8, medium=10-15, hard=15-25)
+
+Return a JSON array like this:
+[
+  {{
+    "title": "Task title",
+    "description": "Short description",
+    "points": 10,
+    "type": "daily"
+  }}
+]
+
+Return ONLY the JSON array, no other text."""
+        
+        response = await call_openrouter(prompt)
+        
+        # Parse AI response as JSON
+        import json
+        try:
+            # Extract JSON from response (AI might add extra text)
+            start_idx = response.find('[')
+            end_idx = response.rfind(']') + 1
+            if start_idx != -1 and end_idx > start_idx:
+                json_str = response[start_idx:end_idx]
+                tasks_data = json.loads(json_str)
+            else:
+                tasks_data = json.loads(response)
+        except json.JSONDecodeError:
+            raise ValueError("Could not parse AI response as JSON")
+        
+        # Validate and insert tasks
+        created_tasks = []
+        for task_data in tasks_data:
+            if not isinstance(task_data, dict):
+                continue
+                
+            # Ensure required fields
+            task = Resolution(
+                title=task_data.get("title", "Unnamed Task"),
+                description=task_data.get("description", ""),
+                points=int(task_data.get("points", 10)),
+                type="daily"
+            )
+            
+            # Add user_id and insert
+            task_dict = task.dict()
+            task_dict["user_id"] = user_id
+            result = await resolutions_collection.insert_one(task_dict)
+            
+            # Get the created task
+            created_task = await resolutions_collection.find_one({"_id": result.inserted_id})
+            created_tasks.append(resolution_helper(created_task))
+        
+        return {
+            "success": True,
+            "message": f"Created {len(created_tasks)} fun daily tasks!",
+            "tasks": created_tasks,
+            "ai_response": response
+        }
+    
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"AI Route Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error generating tasks: {str(e)}")
 
 @app.post("/api/testai")
 async def test_ai(request: AIPrompt):

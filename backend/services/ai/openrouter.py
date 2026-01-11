@@ -4,7 +4,7 @@ from typing import Optional
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
-async def call_openrouter(prompt: str, model: str = "meta-llama/llama-3.2-3b-instruct:free") -> Optional[str]:
+async def call_openrouter(prompt: str, model: str = "allenai/molmo-2-8b:free") -> Optional[str]:
     """
     Call OpenRouter API with a prompt and return the response.
     

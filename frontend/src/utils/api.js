@@ -72,6 +72,13 @@ export const api = {
     return response.json();
   },
 
+  deleteResolution: async (id) => {
+    const response = await apiFetch(`/api/resolutions/${id}`, {
+      method: "DELETE",
+    });
+    return response.json();
+  },
+
   // Score
   getScore: async () => {
     const response = await apiFetch("/api/score");
@@ -88,6 +95,15 @@ export const api = {
     const response = await apiFetch("/api/profile/about", {
       method: "PUT",
       body: JSON.stringify({ about }),
+    });
+    return response.json();
+  },
+
+  // AI
+  generateTasks: async (prompt) => {
+    const response = await apiFetch("/api/generate-tasks", {
+      method: "POST",
+      body: JSON.stringify({ prompt }),
     });
     return response.json();
   },

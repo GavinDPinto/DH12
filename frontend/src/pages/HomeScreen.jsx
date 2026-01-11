@@ -7,6 +7,7 @@ import { api } from '../utils/api.js';
 
 export default function HomeScreen() {
   const [tokens, setTokens] = useState(0);
+  const [tasksRefresh, setTasksRefresh] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -30,6 +31,11 @@ export default function HomeScreen() {
     } catch (error) {
       console.error('Failed to fetch tokens:', error);
     }
+  };
+
+  const handleTasksAdded = () => {
+    // Trigger a refresh of ActiveTasks by updating this state
+    setTasksRefresh(prev => prev + 1);
   };
 
   const handleChange = (e) => {
@@ -78,10 +84,10 @@ export default function HomeScreen() {
     <div className="items-center flex flex-row  gap-10 w-full">
         <TokenDisplay tokens={tokens}/>
         <div className="flex flex-col gap-10 w-1/2 h-1/2">
-            <ActiveTasks onTaskComplete={fetchTokens}/>
+            <ActiveTasks onTaskComplete={fetchTokens} refreshTrigger={tasksRefresh}/>
         </div>
       </div>
-      <ChatPanel />
+      <ChatPanel onTasksAdded={handleTasksAdded} />
     </div>
     );
 }

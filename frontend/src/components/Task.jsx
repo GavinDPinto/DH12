@@ -1,9 +1,17 @@
 import { useState } from 'react';
-export default function Task({ id, title, pointValue, description, schedule, status, completedToday, onComplete }) {
+export default function Task({ id, title, pointValue, description, schedule, status, completedToday, onComplete, onDelete }) {
     const [active, setActive] = useState(false)
-    const handleComplete = () => {
+    const handleComplete = (e) => {
+        e.stopPropagation(); // Prevent parent div click
         if (onComplete) {
             onComplete(id);
+        }
+    };
+
+    const handleDelete = (e) => {
+        e.stopPropagation(); // Prevent parent div click
+        if (onDelete) {
+            onDelete(id);
         }
     };
 
@@ -25,15 +33,24 @@ export default function Task({ id, title, pointValue, description, schedule, sta
             )}
             </div>
 
-            {active &&completedToday && <p className="text-green-500 mt-30">✓ Completed Today</p>}
-            {active && !completedToday && (
+            {active && <div className="flex gap-2 mt-30">
+                {completedToday ? (
+                    <p className="text-green-500">✓ Completed Today</p>
+                ) : (
+                    <button
+                        onClick={handleComplete}
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+                    >
+                        Complete
+                    </button>
+                )}
                 <button
-                    onClick={handleComplete}
-                    className="w-24 h-10 mt-30 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+                    onClick={handleDelete}
+                    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
                 >
-                    Complete
+                    Delete
                 </button>
-            )}
+            </div>}
             
             
         </div>
