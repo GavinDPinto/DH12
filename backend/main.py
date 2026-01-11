@@ -7,6 +7,7 @@ from typing import Optional
 from datetime import datetime, date
 import os
 from dotenv import load_dotenv
+from services.ai.openrouter import call_openrouter
 
 # 1. Load Environment Variables
 load_dotenv()
@@ -47,6 +48,9 @@ class Resolution(BaseModel):
     status: str = "active" # "active", "completed", "archived"
     last_completed_at: Optional[str] = None 
     created_at: str = Field(default_factory=lambda: datetime.now().isoformat())
+
+class AIPrompt(BaseModel):
+    prompt: str
 
 def resolution_helper(resolution) -> dict:
     # Logic to determine if the task is "done for today"
@@ -138,3 +142,20 @@ async def complete_resolution(id: str):
     )
     
     return {"message": "Task completed!", "points_added": points_to_add}
+
+# --- AI ROUTES ---
+
+@app.post("/api/testai")
+async def test_ai(request: AIPrompt):
+    """Test endpoint for OpenRouter AI integration"""
+    if not request.prompt or not request.prompt.strip():
+        raise HTTPException(status_code=400, detail="Prompt cannot be empty")
+    
+    try:
+        response = await call_openrouter(request.prompt)
+        return {"response": response}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"AI Route Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error calling AI service: {str(e)}")
