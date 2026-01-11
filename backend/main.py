@@ -28,7 +28,8 @@ origins = [
     "http://localhost:5173", 
     "http://localhost:3000", 
     "https://dh-12.vercel.app",
-    "https://dh-12-*.vercel.app"  # For preview deployments
+    "https://dh-12-*.vercel.app",  # For preview deployments
+    "https://peer-pressure-67.vercel.app"
 ]
 app.add_middleware(
     CORSMiddleware,
