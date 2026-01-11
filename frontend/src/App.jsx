@@ -1,6 +1,7 @@
 import { useState } from "react";
 import HomeScreen from "./pages/HomeScreen.jsx";
 import Account from "./pages/Account.jsx";
+import Leaderboard from "./pages/Leaderboard.jsx";
 import LogIn from "./pages/LogIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
 
@@ -41,6 +42,7 @@ export default function App() {
 
         {/* MAIN APP */}
         {loggedIn && activeTab === "home" && <HomeScreen />}
+        {loggedIn && activeTab === "leaderboard" && <Leaderboard />}
         {loggedIn && activeTab === "account" && (
           <Account
             onLogout={() => {
@@ -65,6 +67,7 @@ function TabBar({ activeTab, setActiveTab }) {
   return (
     <div className="h-16 bg-pink-900 border-t border-gray-800 flex justify-around items-center">
       <Tab label="Home" active={activeTab === "home"} onClick={() => setActiveTab("home")} />
+      <Tab label="Leaderboard" active={activeTab === "leaderboard"} onClick={() => setActiveTab("leaderboard")} />
       <Tab label="Account" active={activeTab === "account"} onClick={() => setActiveTab("account")} />
     </div>
   );

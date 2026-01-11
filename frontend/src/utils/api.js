@@ -91,6 +91,11 @@ export const api = {
     return response.json();
   },
 
+  getLeaderboard: async () => {
+    const response = await apiFetch("/api/leaderboard");
+    return response.json();
+  },
+
   updateAbout: async (about) => {
     const response = await apiFetch("/api/profile/about", {
       method: "PUT",

@@ -1,7 +1,27 @@
+// Calculate level and progress based on points
+const calculateLevel = (points) => {
+  let level = 1;
+  let totalRequired = 0;
+  let increment = 100;
+  
+  while (points >= totalRequired + increment) {
+    totalRequired += increment;
+    level++;
+    increment += 100;
+  }
+  
+  const pointsInCurrentLevel = points - totalRequired;
+  const pointsNeededForNextLevel = increment;
+  const progress = (pointsInCurrentLevel / pointsNeededForNextLevel) * 100;
+  
+  return { level, progress, pointsInCurrentLevel, pointsNeededForNextLevel, totalRequired };
+};
+
 export default function TokenDisplay({ tokens = 0 }) {
+    const { level, progress, pointsInCurrentLevel, pointsNeededForNextLevel } = calculateLevel(tokens);
     const radius = 50
     const circumference = Math.PI * radius
-    const offset = tokens < 100 ? circumference * (1 - tokens / 100) : 0
+    const offset = circumference * (1 - progress / 100)
   return (
     <div className="w-1/2 h-1/2 flex items-center justify-center">
     <div className="w-180 h-130 flex flex-col items-center justify-center text-white text-center">
@@ -32,7 +52,11 @@ export default function TokenDisplay({ tokens = 0 }) {
       </linearGradient>
     </defs>
   </svg>
-  <p className="font-bold text-5xl">Tokens: {tokens}</p>
+  <div className="text-center mt-2">
+    <p className="font-bold text-5xl">Level {level}</p>
+    <p className="text-2xl text-gray-400 mt-1">{tokens} Tokens</p>
+    <p className="text-sm text-gray-500 mt-1">{pointsInCurrentLevel} / {pointsNeededForNextLevel} to next level</p>
+  </div>
 </div>
 </div>
 

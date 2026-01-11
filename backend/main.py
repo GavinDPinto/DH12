@@ -121,6 +121,19 @@ async def get_current_user(authorization: Optional[str] = Header(None)):
     
     return user
 
+def calculate_level(total_points: int) -> int:
+    """Calculate level based on total points with increasing thresholds"""
+    level = 1
+    total_required = 0
+    increment = 100
+    
+    while total_points >= total_required + increment:
+        total_required += increment
+        level += 1
+        increment += 100
+    
+    return level
+
 def resolution_helper(resolution) -> dict:
     # Logic to determine if the task is "done for today"
     is_completed_today = False
@@ -210,6 +223,33 @@ async def get_score(current_user: dict = Depends(get_current_user)):
         return {"total_points": 0}
     return {"total_points": stats["total_points"]}
 
+@app.get("/api/leaderboard")
+async def get_leaderboard(current_user: dict = Depends(get_current_user)):
+    """Get global leaderboard of all users sorted by level"""
+    leaderboard = []
+    
+    # Get all users
+    async for user in users_collection.find():
+        user_id = str(user["_id"])
+        
+        # Get user stats
+        stats = await stats_collection.find_one({"_id": user_id})
+        total_points = stats.get("total_points", 0) if stats else 0
+        
+        # Calculate level
+        level = calculate_level(total_points)
+        
+        leaderboard.append({
+            "username": user["username"],
+            "level": level,
+            "total_points": total_points
+        })
+    
+    # Sort by level (descending), then by points (descending)
+    leaderboard.sort(key=lambda x: (x["level"], x["total_points"]), reverse=True)
+    
+    return {"leaderboard": leaderboard}
+
 @app.get("/api/profile")
 async def get_profile(current_user: dict = Depends(get_current_user)):
     user_id = str(current_user["_id"])
@@ -217,14 +257,16 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
     # Get user stats
     stats = await stats_collection.find_one({"_id": user_id})
     if not stats:
-        stats = {"_id": user_id, "total_points": 0, "streak": 67, "level": 67, "tasks_completed": 0, "about": ""}
+        stats = {"_id": user_id, "total_points": 0, "streak": 0, "tasks_completed": 0, "about": ""}
         await stats_collection.insert_one(stats)
     
-    # Ensure streak and level exist (set defaults if missing)
+    # Calculate level dynamically based on points
+    total_points = stats.get("total_points", 0)
+    calculated_level = calculate_level(total_points)
+    
+    # Ensure streak exists (set default if missing)
     if "streak" not in stats:
-        stats["streak"] = 67
-    if "level" not in stats:
-        stats["level"] = 67
+        stats["streak"] = 0
     if "tasks_completed" not in stats:
         stats["tasks_completed"] = 0
     if "about" not in stats:
@@ -240,16 +282,16 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
     if tasks_completed != stats.get("tasks_completed", 0):
         await stats_collection.update_one(
             {"_id": user_id},
-            {"$set": {"tasks_completed": tasks_completed, "streak": stats["streak"], "level": stats["level"]}}
+            {"$set": {"tasks_completed": tasks_completed, "streak": stats["streak"]}}
         )
     
     return {
         "username": current_user["username"],
         "email": current_user["email"],
-        "total_points": stats.get("total_points", 0),
+        "total_points": total_points,
         "tasks_completed": tasks_completed,
-        "streak": stats.get("streak", 67),
-        "level": stats.get("level", 67),
+        "streak": stats.get("streak", 0),
+        "level": calculated_level,
         "about": stats.get("about", "")
     }
 
