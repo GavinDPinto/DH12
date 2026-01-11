@@ -1,9 +1,10 @@
 export default function TokenDisplay({ tokens = 0 }) {
     const radius = 50
     const circumference = Math.PI * radius
-    const offset = circumference * (1 - tokens / 100)
+    const offset = tokens < 100 ? circumference * (1 - tokens / 100) : 0
   return (
-    <div className="w-120 h-85 flex flex-col items-center justify-center text-white text-center">
+    <div className="w-1/2 h-1/2 flex items-center justify-center">
+    <div className="w-180 h-130 flex flex-col items-center justify-center text-white text-center">
   <svg viewBox="0 0 120 60" className="w-full h-full">
     <path
       d="M10 50 A50 50 0 0 1 110 50"
@@ -32,6 +33,7 @@ export default function TokenDisplay({ tokens = 0 }) {
     </defs>
   </svg>
   <p className="font-bold text-5xl">Tokens: {tokens}</p>
+</div>
 </div>
 
   )
