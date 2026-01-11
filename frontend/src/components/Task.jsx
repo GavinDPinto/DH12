@@ -19,12 +19,12 @@ export default function Task({ id, title, pointValue, description, schedule, sta
     return (
         <div
       onClick={() => setActive(!active)}
-      className={`flex flex-row gap-10 bg-gray-800 hover p-4 rounded-lg border border-gray-700 ${active ? 'w-full h-80 cursor-pointer' : 'w-full h-30 cursor-pointer'} transition-all duration-300`}
+      className={`flex flex-row gap-10 bg-gray-800 hover p-4  rounded-lg border-3 border-gray-800 ${active ? 'w-full h-80 cursor-pointer' : 'w-full h-30 cursor-pointer'} transition-all duration-300`}
     >       
-            <div className='flex flex-col'>
+            <div className='flex flex-col pb-6'>
             <h2 className="p-5 text-2xl font-semibold text-white">{title}</h2>
             {active && (
-                <div className="flex flex-col text-gray-300 text-left ml-10 mt-6  gap-1 text-2xl w-full">
+                <div className="flex  flex-col text-gray-300 text-left ml-10  mt-6  gap-1 text-xl w-full">
                     <p><strong>Points:</strong> {pointValue}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Schedule:</strong> {schedule}</p>
