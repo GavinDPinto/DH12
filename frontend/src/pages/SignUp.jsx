@@ -1,14 +1,14 @@
 import { useState } from "react";
 import LogIn from "./LogIn.jsx";
 
-export default function SignUp() {
+export default function SignUp({ onSignUp, onBack }) {
   const [logIn, setLogIn] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [warning, setWarning] = useState("");
 
-  if (logIn) return <LogIn />;
+  if (logIn) return <LogIn onLogin={onSignUp} />;
 
   const handleSignUp = () => {
     if (!username || !email || !password) {
@@ -29,7 +29,10 @@ export default function SignUp() {
     <div className="h-full overflow-y-auto flex justify-center px-4 py-10">
       <div className="w-full max-w-md bg-gray-900 rounded-2xl shadow-lg p-6 flex flex-col gap-6">
         <button
-          onClick={() => setLogIn(true)}
+          onClick={() => {
+            if (onBack) onBack();
+            else setLogIn(true);
+          }}
           className="text-blue-400 cursor-pointer font-semibold text-center"
         >
           Already have an account? Log in!

@@ -1,13 +1,4 @@
-import { useState } from "react";
-import LogIn from "./LogIn.jsx";
-import SignUp from "./SignUp.jsx";
-
 export default function Account() {
-  const [loggedIn, setLoggedIn] = useState(true);
-
-  if (!loggedIn) {
-    return <LogIn />;
-  }
 
   return (
     <div className="h-full overflow-y-auto flex justify-center px-4 py-10">
@@ -44,7 +35,6 @@ export default function Account() {
           <ProfileButton onClick={() => {}} label="Edit Profile" />
           <ProfileButton onClick={() => {}} label="Settings" />
           <ProfileButton
-            onClick={() => setLoggedIn(false)}
             label="Log Out"
             danger
           />

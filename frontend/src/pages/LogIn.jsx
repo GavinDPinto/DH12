@@ -18,7 +18,7 @@ export default function LogIn({ onLogin }) {
     }
     setWarning("");
     // You can add actual auth logic here
-    if (onLogin) onLogin();
+    if (true) onLogin();
   };
 
   return (
