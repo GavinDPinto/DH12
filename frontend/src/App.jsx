@@ -20,7 +20,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="p-12 font-sans bg-gray-900 min-h-screen">
+    <div className="p-20 font-sans bg-gray-900 min-h-screen">
     <HomeScreen/>
     </div>
   );

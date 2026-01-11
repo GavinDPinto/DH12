@@ -67,19 +67,20 @@ export default function HomeScreen() {
   };
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex flex-row gap-10">
+    <div className="flex flex-row gap-10">
         <TokenDisplay/>
+      <div className="flex flex-col gap-10">
         <ActiveTasks/>
-      </div>
-
-      <div className="mt-6">
+        <div className="mt-6">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+          className="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded"
         >
           {showForm ? 'Cancel' : 'Add Task'}
         </button>
+      </div>
+
+      
 
         {showForm && (
           <form onSubmit={handleSubmit} className="mt-4 bg-gray-800 p-6 rounded-lg border border-gray-700 max-w-md">
