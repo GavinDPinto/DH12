@@ -102,7 +102,7 @@ export default function Account({ onLogout }) {
             {!editingAbout && (
               <button
                 onClick={() => setEditingAbout(true)}
-                className="text-blue-400 hover:text-blue-300 text-sm font-semibold"
+                className="text-blue-400 cursor-pointer hover:text-blue-300 text-sm font-semibold"
               >
                 Edit
               </button>
@@ -157,9 +157,9 @@ export default function Account({ onLogout }) {
 
 function Stat({ label, value }) {
   return (
-    <div className="bg-gray-800 rounded-xl p-4 text-center">
+    <div className="bg-gradient-to-r from-pink-600 to-yellow-600 text-white shadow-lg rounded-xl p-4 text-center">
       <p className="text-xl font-bold text-white">{value}</p>
-      <p className="text-sm text-gray-400">{label}</p>
+      <p className="text-sm text-white-400">{label}</p>
     </div>
   );
 }
@@ -168,7 +168,7 @@ function ProfileButton({ label, danger, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full py-3 rounded-xl font-semibold transition ${
+      className={`w-full py-3 cursor-pointer rounded-xl font-semibold transition ${
         danger
           ? "bg-red-600 hover:bg-red-700 text-white"
           : "bg-gray-700 hover:bg-gray-600 text-white"

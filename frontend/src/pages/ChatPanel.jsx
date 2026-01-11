@@ -146,7 +146,7 @@ export default function ChatPanel({ onTasksAdded }) {
           {messages.length > 0 && (
             <button
               onClick={handleClearChat}
-              className="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition font-semibold self-center"
+              className="mt-4 cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition font-semibold self-center"
             >
               Clear Chat
             </button>

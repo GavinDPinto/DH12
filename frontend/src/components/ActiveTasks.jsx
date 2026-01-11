@@ -78,7 +78,7 @@ export default function ActiveTasks({ onTaskComplete, refreshTrigger }) {
           {hasMore && !showAll && (
             <button
               onClick={() => setShowAll(true)}
-              className="mt-4 w-full text-blue-400 hover:text-blue-300 font-semibold py-2 rounded-lg transition"
+              className="mt-4 w-full cursor-pointer text-blue-400 hover:text-blue-300 font-semibold py-2 rounded-lg transition"
             >
               Show All ({tasks.length} tasks)
             </button>
@@ -86,7 +86,7 @@ export default function ActiveTasks({ onTaskComplete, refreshTrigger }) {
           {showAll && (
             <button
               onClick={() => setShowAll(false)}
-              className="mt-4 w-full text-blue-400 hover:text-blue-300 font-semibold py-2 rounded-lg transition"
+              className="mt-4 w-full text-blue-400 cursor-pointer hover:text-blue-300 font-semibold py-2 rounded-lg transition"
             >
               Show Less
             </button>

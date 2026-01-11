@@ -24,7 +24,7 @@ export default function TokenDisplay({ tokens = 0 }) {
     const offset = circumference * (1 - progress / 100)
   return (
     <div className="w-1/2 h-1/2 flex items-center justify-center">
-    <div className="w-180 h-130 flex flex-col items-center justify-center text-white text-center">
+    <div className="w-180 h-150 flex flex-col items-center justify-center text-white text-center">
   <svg viewBox="0 0 120 60" className="w-full h-full">
     <path
       d="M10 50 A50 50 0 0 1 110 50"

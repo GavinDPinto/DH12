@@ -27,7 +27,7 @@ export default function Chat({ onSend }) {
       />
       <button
         onClick={handleSend}
-        className="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors duration-200"
+        className="ml-2 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors duration-200"
       >
         Send
       </button>

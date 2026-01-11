@@ -40,7 +40,7 @@ export default function TaskSuggestions({
       {hasMore && !showAll && (
         <button
           onClick={() => setShowAll(true)}
-          className="w-full text-blue-400 hover:text-blue-300 text-sm font-semibold py-2 rounded-lg transition"
+          className="w-full text-blue-400 cursor-pointer hover:text-blue-300 text-sm font-semibold py-2 rounded-lg transition"
         >
           Show All ({tasks.length} tasks)
         </button>
@@ -48,7 +48,7 @@ export default function TaskSuggestions({
       <div className="flex gap-2 mt-4">
         <button
           onClick={() => onAddSelected(messageId)}
-          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-3 py-2 rounded-lg transition"
+          className="cursor-pointer flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-3 py-2 rounded-lg transition"
         >
           Add Selected to List
         </button>

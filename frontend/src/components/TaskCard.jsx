@@ -1,7 +1,7 @@
 export default function TaskCard({ task, taskIdx, messageId, isSelected, onToggleSelect, onDelete }) {
   return (
     <div
-      className={`bg-gray-800 border rounded-lg p-3 text-gray-200 text-sm transition ${
+      className={`bg-gray-800 border rounded-lg p-3 cursor-pointer text-gray-200 text-sm transition ${
         isSelected
           ? "border-blue-500 shadow-lg shadow-blue-500/30"
           : "border-gray-700 opacity-60"
@@ -24,7 +24,7 @@ export default function TaskCard({ task, taskIdx, messageId, isSelected, onToggl
         </div>
         <button
           onClick={() => onDelete(messageId, taskIdx)}
-          className="text-red-400 hover:text-red-300 text-xl leading-none"
+          className="text-red-400 hover:text-red-300 text-xl cursor-pointer leading-none"
           title="Delete this task"
         >
           ✕
