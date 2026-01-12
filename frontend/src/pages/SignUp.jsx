@@ -53,6 +53,10 @@ export default function SignUp({ onSignUp, onBack }) {
 
         <h1 className="text-2xl font-bold text-white">Sign Up</h1>
 
+        <div className="p-3 bg-blue-900/40 border border-blue-500/50 rounded-lg text-blue-200 text-sm">
+          ⚠️ Your username will be publicly displayed on the leaderboard to all users
+        </div>
+
         <input
           type="text"
           placeholder="Username"
