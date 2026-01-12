@@ -35,7 +35,7 @@ export default function App() {
             className="w-32 h-32 mb-6"
           />
           <h1 className="text-7xl font-bold text-white">
-            Welcome to Peer Pressure 
+            Welcome to PeerPressure 
           </h1>
         </div>
       )}
