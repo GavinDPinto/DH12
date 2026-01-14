@@ -30,3 +30,60 @@ PeerPressure is a full-stack application deployed to the cloud.
 ---
 
 **Made with ❤️ and ☕ during DeltaHacks 12**
+
+```mermaid 
+  graph TD
+    %% --- Definitions of Nodes ---
+    subgraph Client ["💻 Client Side (Browser)"]
+        User[👤 User]
+        UI["⚛️ Frontend SPA (React + Vite + Tailwind)"]
+    end
+
+    subgraph VercelCloud ["☁️ Vercel Hosting"]
+        UI
+    end
+
+    subgraph RenderCloud ["☁️ Render Hosting"]
+        Backend["🐍 Backend API Server (FastAPI + Uvicorn)"]
+        
+        subgraph Backend Internals
+            Auth["🔐 Auth Handler (JWT/Bcrypt)"]
+            GameLogic["🎮 Gamification Logic & Points"]
+        end
+        Backend --- Auth
+        Backend --- GameLogic
+    end
+
+    subgraph Data Layer
+        DB[("🍃 MongoDB Atlas (Database)")]
+    end
+
+    subgraph AI Layer
+        AI["🤖 OpenRouter API (LLM Provider)"]
+    end
+
+    %% --- Connections and Data Flow ---
+    
+    %% 1. User loads app
+    User ==>|"1. Visits URL"| UI
+    
+    %% 2. Frontend talks to Backend
+    UI ==>"2. API Requests (JSON + Bearer Token) HTTPS"| Backend
+    Backend -.- >|"Returns Data/Confirmation"| UI
+
+    %% 3. Backend talks to Database
+    Backend <==>"3. Read/Write User Data, Tasks, Scores"| DB
+
+    %% 4. The AI Flow
+    Backend ==>"4. POST raw user goal prompt"| AI
+    AI -.->|"5. Returns structured JSON task object (e.g., {'task': '...', 'points': 20})"| Backend
+
+    %% --- Styling ---
+    classDef hosting fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#000;
+    classDef storage fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000;
+    classDef ai fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000;
+    
+    class VercelCloud,RenderCloud hosting;
+    class DB storage;
+    class AI ai;
+```
